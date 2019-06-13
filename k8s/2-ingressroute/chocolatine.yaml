@@ -1,0 +1,13 @@
+apiVersion: contour.heptio.com/v1beta1
+kind: IngressRoute
+metadata:
+  name: chocolatine
+  namespace: chocolatine
+  labels:
+    app: chocolatine
+spec:
+  routes:
+  - match: /chocolatine
+    services:
+    - name: chocolatine
+      port: 80

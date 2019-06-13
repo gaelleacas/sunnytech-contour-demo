@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: chocolatine
+  namespace: chocolatine
+  labels:
+    app: chocolatine
+  annotations:
+    kubernetes.io/ingress.class: "contour"
+    # ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  # tls:
+  # - secretName: tls-santa
+  #   hosts:
+  #   - santa.local
+  rules:
+  - host: flamant.food
+    http:
+      paths:
+      - path: "/chocolatine"
+        backend:
+          serviceName: chocolatine
+          servicePort: 80
+      - path: "/blog"
+        backend:
+          serviceName: chocolatine-blog
+          servicePort: 80

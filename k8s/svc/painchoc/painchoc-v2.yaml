@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: painchoc-v2
+  namespace: painchoc
+  labels:
+    app: painchoc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: painchoc-v2
+  template:
+    metadata:
+      labels:
+        app: painchoc-v2
+    spec:
+      containers:
+      - name: painchoc
+        image: eu.gcr.io/khaly-221308/demo-contour
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+        - name: VERSION
+          value: "Shop v2"
+        - name: TEAM
+          value: "Painchoc"
+        - name: LABEL
+          value: "Team"
+        - name: ROUTING
+          value: "false"
+        - name: PORT
+          value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: painchoc-v2
+  namespace: painchoc
+  labels:
+    app: painchoc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: painchoc-v2

@@ -1,0 +1,18 @@
+apiVersion: contour.heptio.com/v1beta1
+kind: IngressRoute
+metadata:
+  name: api-food
+  namespace: api-food
+  labels:
+    app: api-food
+spec:
+  virtualhost:
+    fqdn: api.flamant.food
+    tls:
+      secretName: flamant-food/main-tls
+  routes:
+  - match: /
+    services:
+    - name: api-food
+      port: 80
+

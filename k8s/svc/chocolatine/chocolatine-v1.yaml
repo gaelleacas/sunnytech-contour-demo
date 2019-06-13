@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chocolatine
+  namespace: chocolatine
+  labels:
+    app: chocolatine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chocolatine
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: chocolatine
+    spec:
+      containers:
+      - name: chocolatine
+        image: eu.gcr.io/khaly-221308/demo-contour
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+        env:
+        - name: VERSION
+          value: "Shop v1"
+        - name: TEAM
+          value: "Chocolatine"
+        - name: LABEL
+          value: "Team"
+        - name: ROUTING
+          value: "false"
+        - name: PORT
+          value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chocolatine
+  namespace: chocolatine
+  labels:
+    app: chocolatine
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: chocolatine

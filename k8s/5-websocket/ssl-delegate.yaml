@@ -1,0 +1,10 @@
+apiVersion: contour.heptio.com/v1beta1
+kind: TLSCertificateDelegation
+metadata:
+  name: main-tls-wildcard
+  namespace: flamant-food
+spec:
+  delegations:
+    - secretName: main-tls
+      targetNamespaces:
+      - api-food

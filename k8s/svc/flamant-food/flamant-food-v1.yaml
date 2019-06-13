@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flamant-food
+  namespace: flamant-food
+  labels:
+    app: flamant-food
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flamant-food
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: flamant-food
+    spec:
+      containers:
+      - name: flamant-food
+        image: eu.gcr.io/khaly-221308/demo-contour
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+        env:
+        - name: VERSION
+          value: "Food v1"
+        - name: TEAM
+          value: "SunnyTech"
+        - name: LABEL
+          value: "Main"
+        - name: ROUTING
+          value: "false"
+        - name: PORT
+          value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flamant-food
+  namespace: flamant-food
+  labels:
+    app: flamant-food
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  type: ClusterIP
+  selector:
+    app: flamant-food

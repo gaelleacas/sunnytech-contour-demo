@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: painchoc
+  namespace: painchoc
+  labels:
+    app: painchoc
+  annotations:
+    kubernetes.io/ingress.class: "contour"
+    # ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  # tls:
+  # - secretName: tls-santa
+  #   hosts:
+  #   - santa.local
+  rules:
+  - host: flamant.food
+    http:
+      paths:
+      - path: "/painchoc"
+        backend:
+          serviceName: painchoc
+          servicePort: 80
+      - path: "/blog"
+        backend:
+          serviceName: painchoc-blog
+          servicePort: 80
